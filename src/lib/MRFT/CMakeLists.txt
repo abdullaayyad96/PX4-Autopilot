@@ -1,6 +1,6 @@
 ############################################################################
 #
-#   Copyright (c) 2015 PX4 Development Team. All rights reserved.
+#   Copyright (c) 2018 PX4 Development Team. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -30,27 +30,27 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 ############################################################################
+# cmake_minimum_required (VERSION 2.8.2)
+project(MRFT C CXX)
 
-add_subdirectory(Takeoff)
-add_subdirectory(PositionControl)
+file(GLOB MRFT_SRCs src/*.cpp)
 
-px4_add_module(
-	MODULE modules__mc_pos_control
-	MAIN mc_pos_control
-	COMPILE_FLAGS
-		-Wno-implicit-fallthrough # TODO: fix and remove
-	SRCS
-		mc_pos_control_main.cpp
-	DEPENDS
-		PositionControl
-		controllib
-		PositionMRFT
-		# HEAR2
-		MRFT
-		FlightTasks
-		git_ecl
-		ecl_geo
-		WeatherVane
-		CollisionPrevention
-		Takeoff
-	)
+# list(REMOVE_ITEM MRFT_SRCs "src/main.cpp")
+
+px4_add_library(MRFT  ${MRFT_SRCs})
+
+if ( CMAKE_COMPILER_IS_GNUCC )
+    target_compile_options(MRFT PRIVATE -w) #use -w to inhibit warning messages
+endif()
+if ( MSVC )
+    target_compile_options(MRFT PRIVATE /W4)
+endif()
+
+target_include_directories(MRFT
+	PUBLIC
+	${CMAKE_CURRENT_SOURCE_DIR}
+	include
+)
+
+set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
+    CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)

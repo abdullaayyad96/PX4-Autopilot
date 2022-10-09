@@ -35,9 +35,31 @@ px4_add_library(PositionControl
 	PositionControl.cpp
 	ControlMath.cpp
 )
+
+px4_add_library(PositionMRFT
+	PositionMRFT.cpp
+	ControlMath.cpp
+)
+
 target_include_directories(PositionControl
 	PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+message(WARN  "HOLA" )
+# message(WARN  ${HEAR2_INCLUDE_DIR} )
+message(WARN  ${MRFT_INCLUDE_DIR} )
+target_include_directories(PositionMRFT
+	PUBLIC
+	${CMAKE_CURRENT_SOURCE_DIR}
+	# ${HEAR2_INCLUDE_DIR}
+	${MRFT_INCLUDE_DIR}
+)
+
+target_link_libraries(PositionMRFT
+	PRIVATE
+	# HEAR2
+	MRFT
 )
 
 px4_add_unit_gtest(SRC ControlMathTest.cpp LINKLIBS PositionControl)

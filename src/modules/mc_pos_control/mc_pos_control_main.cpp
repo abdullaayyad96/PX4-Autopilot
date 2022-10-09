@@ -69,6 +69,7 @@
 #include <uORB/topics/hover_thrust_estimate.h>
 
 #include "PositionControl/PositionControl.hpp"
+#include "PositionControl/PositionMRFT.hpp"
 #include "Takeoff/Takeoff.hpp"
 
 #include <float.h>
@@ -175,7 +176,26 @@ private:
 		(ParamInt<px4::params::MPC_ALT_MODE>) _param_mpc_alt_mode,
 		(ParamFloat<px4::params::MPC_TILTMAX_LND>) _param_mpc_tiltmax_lnd, /**< maximum tilt for landing and smooth takeoff */
 		(ParamFloat<px4::params::MPC_THR_MIN>) _param_mpc_thr_min,
-		(ParamFloat<px4::params::MPC_THR_MAX>) _param_mpc_thr_max
+		(ParamFloat<px4::params::MPC_THR_MAX>) _param_mpc_thr_max,
+
+		// MRFT parameters
+		(ParamBool<px4::params::MRFT_X_ENABLE>) _param_mrft_x_enable,
+		(ParamFloat<px4::params::MRFT_X_BETA>) _param_mrft_x_beta,
+		(ParamFloat<px4::params::MRFT_X_H>) _param_mrft_x_h,
+		(ParamInt<px4::params::MRFT_X_NO_SWITCH>) _param_mrft_x_no_switch,
+		(ParamInt<px4::params::MRFT_X_N_CONF>) _param_mrft_x_n_conf,
+
+		(ParamBool<px4::params::MRFT_Y_ENABLE>) _param_mrft_y_enable,
+		(ParamFloat<px4::params::MRFT_Y_BETA>) _param_mrft_y_beta,
+		(ParamFloat<px4::params::MRFT_Y_H>) _param_mrft_y_h,
+		(ParamInt<px4::params::MRFT_Y_NO_SWITCH>) _param_mrft_y_no_switch,
+		(ParamInt<px4::params::MRFT_Y_N_CONF>) _param_mrft_y_n_conf,
+
+		(ParamBool<px4::params::MRFT_Z_ENABLE>) _param_mrft_z_enable,
+		(ParamFloat<px4::params::MRFT_Z_BETA>) _param_mrft_z_beta,
+		(ParamFloat<px4::params::MRFT_Z_H>) _param_mrft_z_h,
+		(ParamInt<px4::params::MRFT_Z_NO_SWITCH>) _param_mrft_z_no_switch,
+		(ParamInt<px4::params::MRFT_Z_N_CONF>) _param_mrft_z_n_conf
 	);
 
 	control::BlockDerivative _vel_x_deriv; /**< velocity derivative in x */
@@ -185,6 +205,7 @@ private:
 	FlightTasks _flight_tasks; /**< class generating position controller setpoints depending on vehicle task */
 	PositionControl _control; /**< class for core PID position control */
 	PositionControlStates _states{}; /**< structure containing vehicle state information for position control */
+	PositionMRFT _mrft_control; /**< class for position MRFT */
 
 	hrt_abstime _last_warn = 0; /**< timer when the last warn message was sent out */
 
@@ -209,6 +230,9 @@ private:
 	Vector3f _wv_dcm_z_sp_prev{0, 0, 1};
 
 	perf_counter_t _cycle_perf;
+
+	MRFT_parameters _mrft_x_params, _mrft_y_params, _mrft_z_params;
+	bool _mrft_x_en, _mrft_y_en, _mrft_z_en; // Enabling of MRFT on X, Y, and Z channels
 
 	/**
 	 * Update our local parameter cache.
@@ -392,6 +416,29 @@ MulticopterPositionControl::parameters_update(bool force)
 		if (_wv_controller != nullptr) {
 			_wv_controller->update_parameters();
 		}
+
+		// MRFT parameters
+		_mrft_x_en = _param_mrft_x_enable.get();
+		_mrft_x_params.beta = _param_mrft_x_beta.get();
+		_mrft_x_params.relay_amp = _param_mrft_x_h.get();
+		_mrft_x_params.no_switch_delay_in_ms = _param_mrft_x_no_switch.get();
+		_mrft_x_params.num_of_peak_conf_samples = _param_mrft_x_n_conf.get();
+
+		_mrft_y_en = _param_mrft_y_enable.get();
+		_mrft_y_params.beta = _param_mrft_y_beta.get();
+		_mrft_y_params.relay_amp = _param_mrft_y_h.get();
+		_mrft_y_params.no_switch_delay_in_ms = _param_mrft_y_no_switch.get();
+		_mrft_y_params.num_of_peak_conf_samples = _param_mrft_y_n_conf.get();
+
+		_mrft_z_en = _param_mrft_z_enable.get();
+		_mrft_z_params.beta = _param_mrft_z_beta.get();
+		_mrft_z_params.relay_amp = _param_mrft_z_h.get();
+		_mrft_z_params.no_switch_delay_in_ms = _param_mrft_z_no_switch.get();
+		_mrft_z_params.num_of_peak_conf_samples = _param_mrft_z_n_conf.get();
+
+		_mrft_control.updateMRFTEnable(_mrft_x_en, _mrft_y_en, _mrft_z_en);
+
+		_mrft_control.setMRFTParams(_mrft_x_params, _mrft_y_params, _mrft_z_params);
 	}
 
 	return OK;
@@ -411,6 +458,7 @@ MulticopterPositionControl::poll_subscriptions()
 		if (_hover_thrust_estimate_sub.update(&hte)) {
 			if (hte.valid) {
 				_control.updateHoverThrust(hte.hover_thrust);
+				_mrft_control.updateHoverThrust(hte.hover_thrust);
 			}
 		}
 	}
@@ -617,10 +665,12 @@ MulticopterPositionControl::Run()
 
 			if (flying) {
 				_control.setThrustLimits(_param_mpc_thr_min.get(), _param_mpc_thr_max.get());
+				_mrft_control.setThrustLimits(_param_mpc_thr_min.get(), _param_mpc_thr_max.get());
 
 			} else {
 				// allow zero thrust when taking off and landing
 				_control.setThrustLimits(0.f, _param_mpc_thr_max.get());
+				_mrft_control.setThrustLimits(0.f, _param_mpc_thr_max.get());
 			}
 
 			if (not_taken_off || flying_but_ground_contact) {
@@ -645,7 +695,12 @@ MulticopterPositionControl::Run()
 			_control.setConstraints(constraints);
 			_control.setInputSetpoint(setpoint);
 
-			if (!_control.update(dt)) {
+			// Run mrft
+			_mrft_control.setState(_states);
+			_mrft_control.setConstraints(constraints);
+			_mrft_control.setInputSetpoint(setpoint);
+
+			if (!_control.update(dt) || !_mrft_control.update(dt)) {
 				if ((time_stamp_now - _last_warn) > 1_s) {
 					PX4_WARN("invalid setpoints");
 					_last_warn = time_stamp_now;
@@ -666,9 +721,18 @@ MulticopterPositionControl::Run()
 			// If the desired setpoint has a velocity-setpoint only, then _local_pos_sp will contain valid velocity- and thrust-setpoint, but the position-setpoint
 			// will remain NAN. Given that the PositionController cannot generate a position-setpoint, this type of setpoint is always equal to the input to the
 			// PositionController.
+
+			// Combine MRFT and Position Control throttle output
+			Vector3f mrft_thr_sp_weights = Vector3f((float)_mrft_x_en, (float)_mrft_y_en, (float)_mrft_z_en);
+			_control.overrideThorrtleSetpoint(_mrft_control.getThrottleSetpoint(), mrft_thr_sp_weights);
+
 			vehicle_local_position_setpoint_s local_pos_sp{};
 			local_pos_sp.timestamp = time_stamp_now;
 			_control.getLocalPositionSetpoint(local_pos_sp);
+
+			vehicle_local_position_setpoint_s mrft_pos_sp{};
+			mrft_pos_sp.timestamp = time_stamp_now;
+			_mrft_control.getLocalPositionSetpoint(mrft_pos_sp);
 
 			// Publish local position setpoint
 			// This message will be used by other modules (such as Landdetector) to determine vehicle intention.

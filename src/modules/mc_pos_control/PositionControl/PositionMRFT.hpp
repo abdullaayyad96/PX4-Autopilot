@@ -32,29 +32,26 @@
  ****************************************************************************/
 
 /**
- * @file PositionControl.hpp
+ * @file PositionMRFT.hpp
  *
- * A cascaded position controller for position/velocity control only.
+ * An MRFT implementation for position loop
  */
 
 #pragma once
 
 #include <matrix/matrix/math.hpp>
+#include <MRFT/include/MRFT.hpp>
+#include <MRFT/include/DataTypes.hpp>
 #include <uORB/topics/vehicle_attitude_setpoint.h>
 #include <uORB/topics/vehicle_constraints.h>
 #include <uORB/topics/vehicle_local_position_setpoint.h>
 
-struct PositionControlStates {
-	matrix::Vector3f position;
-	matrix::Vector3f velocity;
-	matrix::Vector3f acceleration;
-	float yaw;
-};
+#include "PositionControl.hpp"
+
 
 /**
  * 	Core Position-Control for MC.
- * 	This class contains P-controller for position and
- * 	PID-controller for velocity.
+ * 	This class contains and MRFT-controller for position.
  * 	Inputs:
  * 		vehicle position/velocity/yaw
  * 		desired set-point position/velocity/thrust/yaw/yaw-speed
@@ -62,43 +59,26 @@ struct PositionControlStates {
  * 	Output
  * 		thrust vector and a yaw-setpoint
  *
- * 	If there is a position and a velocity set-point present, then
- * 	the velocity set-point is used as feed-forward. If feed-forward is
- * 	active, then the velocity component of the P-controller output has
- * 	priority over the feed-forward component.
- *
- * 	A setpoint that is NAN is considered as not set.
- * 	If there is a position/velocity- and thrust-setpoint present, then
- *  the thrust-setpoint is ommitted and recomputed from position-velocity-PID-loop.
+ * 	Only position setpoints are used, velocity/acceleration/yaw setpoints are
+ *	ignored in current implementation
  */
-class PositionControl
+
+using namespace HEAR;
+
+class PositionMRFT
 {
 public:
 
-	PositionControl() = default;
-	~PositionControl() = default;
+	PositionMRFT() = default;
+	~PositionMRFT() = default;
 
 	/**
-	 * Set the position control gains
-	 * @param P 3D vector of proportional gains for x,y,z axis
+	 * Set the MRFT parameters position loops
+	 * @param x_mrft_params struct including mrft parameters for x channel
+	 * @param y_mrft_params struct including mrft parameters for x channel
+	 * @param z_mrft_params struct including mrft parameters for x channel
 	 */
-	void setPositionGains(const matrix::Vector3f &P) { _gain_pos_p = P; }
-
-	/**
-	 * Set the velocity control gains
-	 * @param P 3D vector of proportional gains for x,y,z axis
-	 * @param I 3D vector of integral gains
-	 * @param D 3D vector of derivative gains
-	 */
-	void setVelocityGains(const matrix::Vector3f &P, const matrix::Vector3f &I, const matrix::Vector3f &D);
-
-	/**
-	 * Set the maximum velocity to execute with feed forward and position control
-	 * @param vel_horizontal horizontal velocity limit
-	 * @param vel_up upwards velocity limit
-	 * @param vel_down downwards velocity limit
-	 */
-	void setVelocityLimits(const float vel_horizontal, const float vel_up, float vel_down);
+	void setMRFTParams(MRFT_parameters &x_mrft_params, MRFT_parameters &y_mrft_params, MRFT_parameters &z_mrft_params);
 
 	/**
 	 * Set the minimum and maximum collective normalized thrust [0,1] that can be output by the controller
@@ -126,6 +106,12 @@ public:
 	 */
 	void updateHoverThrust(const float hover_thrust_new);
 
+
+	/**
+	 * Update the enable status of the MRFT blocks
+	 */
+	void updateMRFTEnable(const bool mrft_x_en, const bool mrft_y_en, const bool mrft_z_en);
+
 	/**
 	 * Pass the current vehicle state to the controller
 	 * @param PositionControlStates structure
@@ -147,8 +133,8 @@ public:
 	void setConstraints(const vehicle_constraints_s &constraints);
 
 	/**
-	 * Apply P-position and PID-velocity controller that updates the member
-	 * thrust, yaw- and yawspeed-setpoints.
+	 * Apply Position MRFT controller that updates the member
+	 * thrust setpoints.
 	 * @see _thr_sp
 	 * @see _yaw_sp
 	 * @see _yawspeed_sp
@@ -156,12 +142,6 @@ public:
 	 * @return true if update succeeded and output setpoint is executable, false if not
 	 */
 	bool update(const float dt);
-
-	/**
-	 * Set the integral term in xy to 0.
-	 * @see _vel_int
-	 */
-	void resetIntegral() { _vel_int.setZero(); }
 
 	/**
 	 * Get the controllers output local position setpoint
@@ -179,26 +159,25 @@ public:
 	 */
 	void getAttitudeSetpoint(vehicle_attitude_setpoint_s &attitude_setpoint) const;
 
-
 	/**
-	 * Override the controller throttle setpoint with an external throttle setpoint
-	 * @param  new_thr_sp vector of new throttle setpoint
-	 * @param  new_thr_weights weights from 0 to 1 on the effect of the new throttle setpoint
+	 * Return the throttle setpoint of MRFT
+	 *
+	 * @return Vector3f MRFT throttle setpoint
 	 */
-	void overrideThorrtleSetpoint(matrix::Vector3f new_thr_sp, matrix::Vector3f new_thr_weights);
+	matrix::Vector3f getThrottleSetpoint();
 
 private:
 	bool _updateSuccessful();
 
-	void _positionControl(); ///< Position proportional control
-	void _velocityControl(const float dt); ///< Velocity PID control
-	void _accelerationControl(); ///< Acceleration setpoint processing
+	HEAR::MRFT_Block _mrft_x_block = MRFT_Block(0);
+	HEAR::MRFT_Block _mrft_y_block = MRFT_Block(1);
+	HEAR::MRFT_Block _mrft_z_block = MRFT_Block(2);
 
-	// Gains
-	matrix::Vector3f _gain_pos_p; ///< Position control proportional gain
-	matrix::Vector3f _gain_vel_p; ///< Velocity control proportional gain
-	matrix::Vector3f _gain_vel_i; ///< Velocity control integral gain
-	matrix::Vector3f _gain_vel_d; ///< Velocity control derivative gain
+	// MRFT params
+	matrix::Vector3f _mrft_h; ///< Position control proportional gain
+	matrix::Vector3f _mrft_beta; ///< phase parameter of MRFT
+	float _no_switch_delay_in_ms; ///< no switch delay of MRFT
+	float num_of_peak_conf_samples; ///< number of peak confirmation samples for MRFT
 
 	// Limits
 	float _lim_vel_horizontal{}; ///< Horizontal velocity limit with feed forward and position control

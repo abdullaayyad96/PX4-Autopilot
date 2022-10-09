@@ -248,3 +248,19 @@ void PositionControl::getAttitudeSetpoint(vehicle_attitude_setpoint_s &attitude_
 	ControlMath::thrustToAttitude(_thr_sp, _yaw_sp, attitude_setpoint);
 	attitude_setpoint.yaw_sp_move_rate = _yawspeed_sp;
 }
+
+void PositionControl::overrideThorrtleSetpoint(Vector3f new_thr_sp, Vector3f new_thr_weights)
+{
+	// PX4_INFO("original throttle: %f", (double)_thr_sp(0));
+	// PX4_INFO("original throttle: %f", (double)_thr_sp(1));
+	// PX4_INFO("original throttle: %f", (double)_thr_sp(2));
+	// PX4_INFO("mrft throttle: %f", (double)new_thr_sp(0));
+	// PX4_INFO("mrft weight: %f", (double)new_thr_weights(0));
+	// new_thr_weights = new_thr_weights.normalized();
+	_thr_sp(0) = (1.0f - new_thr_weights(0)) * _thr_sp(0) + new_thr_weights(0) * new_thr_sp(0);
+	_thr_sp(1) = (1.0f - new_thr_weights(1)) * _thr_sp(1) + new_thr_weights(1) * new_thr_sp(1);
+	_thr_sp(2) = (1.0f - new_thr_weights(2)) * _thr_sp(2) + new_thr_weights(2) * new_thr_sp(2);
+	// PX4_INFO("mrft throttle: %f", (double)_thr_sp(0));
+	// PX4_INFO("mrft throttle: %f", (double)_thr_sp(1));
+	// PX4_INFO("mrft throttle: %f", (double)_thr_sp(2));
+}

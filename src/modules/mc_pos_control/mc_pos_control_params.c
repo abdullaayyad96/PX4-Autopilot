@@ -766,3 +766,163 @@ PARAM_DEFINE_FLOAT(MPC_SPOOLUP_TIME, 1.0f);
  * @group Mission
  */
 PARAM_DEFINE_INT32(MPC_YAW_MODE, 0);
+
+
+/**
+ * Enable x channel MRFT
+ *
+ * @value 0 Disable MRFT on x
+ * @value 1 Enable MRFT on x
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MRFT_X_ENABLE, 0);
+
+
+/**
+ * The beta value for x channel MRFT
+
+ * @min -1.579
+ * @max 1.579
+ * @decimal 3
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MRFT_X_BETA, -0.730f);
+
+
+/**
+ * The relay amplitude value for x channel MRFT
+
+ * @min 0
+ * @max 10
+ * @decimal 2
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MRFT_X_H, 0.15f);
+
+
+/**
+ * The no switch delay value in ms for x channel MRFT
+
+ * @unit ms
+ * @min 0
+ * @max 100
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MRFT_X_NO_SWITCH, 20);
+
+
+/**
+ * The number of confirmation samples for x channel MRFT
+
+ * @min 0
+ * @max 10
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MRFT_X_N_CONF, 5);
+
+
+/**
+ * Enable y channel MRFT
+ *
+ * @value 0 Disable MRFT on y
+ * @value 1 Enable MRFT on y
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MRFT_Y_ENABLE, 0);
+
+
+/**
+ * The beta value for y channel MRFT
+
+ * @min -1.579
+ * @max 1.579
+ * @decimal 3
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MRFT_Y_BETA, -0.730f);
+
+
+/**
+ * The relay amplitude value for y channel MRFT
+
+ * @min 0
+ * @max 10
+ * @decimal 2
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MRFT_Y_H, 0.15f);
+
+
+/**
+ * The no switch delay value in ms for y channel MRFT
+
+ * @unit ms
+ * @min 0
+ * @max 100
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MRFT_Y_NO_SWITCH, 20);
+
+
+/**
+ * The number of confirmation samples for y channel MRFT
+
+ * @min 0
+ * @max 10
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MRFT_Y_N_CONF, 5);
+
+
+/**
+ * Enable z channel MRFT
+ *
+ * @value 0 Disable MRFT on z
+ * @value 1 Enable MRFT on z
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MRFT_Z_ENABLE, 0);
+
+
+/**
+ * The beta value for z channel MRFT
+
+ * @min -1.579
+ * @max 1.579
+ * @decimal 3
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MRFT_Z_BETA, -0.730f);
+
+
+/**
+ * The relay amplitude value for z channel MRFT
+
+ * @min 0
+ * @max 10
+ * @decimal 2
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MRFT_Z_H, 1.0f);
+
+
+/**
+ * The no switch delay value in ms for z channel MRFT
+
+ * @unit ms
+ * @min 0
+ * @max 100
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MRFT_Z_NO_SWITCH, 20);
+
+
+/**
+ * The number of confirmation samples for z channel MRFT
+
+ * @min 0
+ * @max 10
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MRFT_Z_N_CONF, 5);
+
