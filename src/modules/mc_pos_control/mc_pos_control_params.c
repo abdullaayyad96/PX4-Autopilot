@@ -797,7 +797,7 @@ PARAM_DEFINE_FLOAT(MRFT_X_BETA, -0.730f);
  * @decimal 2
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MRFT_X_H, 0.15f);
+PARAM_DEFINE_FLOAT(MRFT_X_H, 0.05f);
 
 
 /**
@@ -850,7 +850,7 @@ PARAM_DEFINE_FLOAT(MRFT_Y_BETA, -0.730f);
  * @decimal 2
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MRFT_Y_H, 0.15f);
+PARAM_DEFINE_FLOAT(MRFT_Y_H, 0.05f);
 
 
 /**
@@ -903,7 +903,7 @@ PARAM_DEFINE_FLOAT(MRFT_Z_BETA, -0.730f);
  * @decimal 2
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MRFT_Z_H, 1.0f);
+PARAM_DEFINE_FLOAT(MRFT_Z_H, 0.05f);
 
 
 /**

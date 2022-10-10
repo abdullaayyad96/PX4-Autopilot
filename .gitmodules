@@ -48,3 +48,9 @@
 [submodule "Tools/flightgear_bridge"]
 	path = Tools/flightgear_bridge
 	url = https://github.com/PX4/PX4-FlightGear-Bridge.git
+[submodule "src/lib/-b"]
+	path = src/lib/-b
+	url = git@github.com:abdullaayyad96/HEAR2.git
+[submodule "src/lib/HEAR2"]
+	path = src/lib/HEAR2
+	url = git@github.com:abdullaayyad96/HEAR2.git

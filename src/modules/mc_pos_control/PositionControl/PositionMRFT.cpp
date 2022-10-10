@@ -114,11 +114,11 @@ bool PositionMRFT::update(const float dt)
 	float mrft_x_output = 0, mrft_y_output = 0, mrft_z_output = 0;
 	_mrft_x_block.process(mrft_x_output, pos_err(0));
 	_mrft_y_block.process(mrft_y_output, pos_err(1));
-	_mrft_z_block.process(mrft_z_output, pos_err(2));
+	_mrft_z_block.process(mrft_z_output, -pos_err(2));
 
 	_thr_sp(0) = mrft_x_output;
 	_thr_sp(1) = mrft_y_output;
-	_thr_sp(2) = mrft_z_output;
+	_thr_sp(2) = -mrft_z_output - _hover_thrust;
 
 	return valid && _updateSuccessful();
 }
