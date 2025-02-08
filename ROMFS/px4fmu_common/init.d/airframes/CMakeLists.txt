@@ -75,6 +75,7 @@ px4_add_romfs_files(
 	4954_hear_octa_telem_indoor
 	4955_hear_quad_ethernet_gps
 	4956_hear_quad_ethernet_rtk
+	4961_hear_ethernet_rtk_emlid
 	4970_hear_rc_raw_forwarder
 	4999_snono_vtol
 	# [5000, 5999] Quadrotor +"
