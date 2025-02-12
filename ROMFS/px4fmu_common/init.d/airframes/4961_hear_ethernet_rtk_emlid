@@ -63,6 +63,7 @@ param set-default SER_TEL3_BAUD 115200 # BAUD rate
 param set-default GPS_1_CONFIG 202 # GPS 2
 param set-default GPS_1_GNSS 31 # All constellations
 param set-default GPS_1_PROTOCOL 4 # Emlid Reach
+param set-default SER_GPS1_BAUD 115200
 
 ##################################################
 ################# ARK Flow #################
@@ -104,8 +105,4 @@ param set-default SER_TEL1_BAUD 57600
 
 # Use internal mag as no external mag is present
 param set-default CAL_MAG0_PRIO 1
-
-# Parameters for UM982 RTK
-param set-default SER_GPS1_BAUD 230400
-param set-default GPS_1_PROTOCOL 6
 
