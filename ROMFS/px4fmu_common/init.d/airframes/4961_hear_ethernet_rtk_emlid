@@ -21,8 +21,8 @@ param set-default EKF2_PREDICT_US 2500
 param set-default EKF2_HGT_REF 0
 param set-default EKF2_GPS_CTRL 15
 param set-default EKF2_BARO_CTRL 1
-param set-default EKF2_RNG_CTRL 0
-param set-default EKF2_MAG_TYPE 2
+param set-default EKF2_RNG_YAWCTRL 0
+param set-default EKF2_MAG_TYPE 2 # 1: HEADING, 2: 3-axis
 param set-default EKF2_EV_CTRL 0
 param set-default GPS_YAW_OFFSET 0
 
@@ -84,6 +84,14 @@ param set-default SENS_FLOW_MAXHGT 25 # in m
 param set-default SENS_FLOW_MAXR 7.4 # to match the PAW3902 maximum angular flow rate
 
 ##################################################
+
+################# EKF RTK Tuning #################
+
+param set-default EKF2_GPS_P_NOISE 0.05
+param set-default EKF2_GPS_V_NOISE 0.03
+
+##################################################
+
 
 echo DEVICE=eth0 > /fs/microsd/net.cfg
 echo BOOTPROTO=static >> /fs/microsd/net.cfg
