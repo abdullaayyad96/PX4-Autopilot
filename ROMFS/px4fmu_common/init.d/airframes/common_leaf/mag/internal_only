@@ -1,0 +1,2 @@
+param set-default SYS_HAS_MAG 1               # Indicates if the system has a magnetometer (0 = no magnetometer)
+param set-default CAL_MAG0_PRIO 1

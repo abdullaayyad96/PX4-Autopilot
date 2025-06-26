@@ -31,6 +31,8 @@
 #
 ############################################################################
 
+add_subdirectory(common_leaf)
+
 px4_add_romfs_files(
 	# [0-999] Reserved (historical)"
 
