@@ -1,0 +1,3 @@
+param set-default IMU_GYRO_CUTOFF 30          # Gyroscope cutoff frequency (Hz)
+param set-default IMU_INTEG_RATE 400          # IMU integration rate (Hz)
+param set-default EKF2_PREDICT_US 2500        # Prediction time period for EKF2 (microseconds)

@@ -1,0 +1,6 @@
+echo DEVICE=eth0 > /fs/microsd/net.cfg
+echo BOOTPROTO=static >> /fs/microsd/net.cfg
+echo IPADDR=192.168.144.4 >> /fs/microsd/net.cfg
+echo NETMASK=255.255.255.0 >>/fs/microsd/net.cfg
+echo ROUTER=192.168.144.1 >>/fs/microsd/net.cfg
+echo DNS=192.168.144.1 >>/fs/microsd/net.cfg

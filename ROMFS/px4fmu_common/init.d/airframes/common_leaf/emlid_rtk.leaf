@@ -1,0 +1,5 @@
+################# Emlid RTK #################
+param set-default GPS_1_CONFIG 202 # GPS 2
+param set-default GPS_1_GNSS 31 # All constellations
+param set-default GPS_1_PROTOCOL 4 # Emlid Reach
+param set-default SER_GPS1_BAUD 115200

@@ -1,0 +1,2 @@
+param set-default CA_ROTOR_COUNT 4            # Number of rotors in the vehicle
+param set-default MPC_THR_HOVER 0.25          # Hover throttle value (normalized)

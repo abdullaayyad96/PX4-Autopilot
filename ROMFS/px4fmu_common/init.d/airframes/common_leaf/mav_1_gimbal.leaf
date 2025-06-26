@@ -1,0 +1,8 @@
+################# Gimbal Support #################
+
+param set-default MAV_1_CONFIG 103            # MAVLink instance 1 configuration (103 = TELEM 3)
+param set-default MAV_1_MODE 10               # MAVLink mode for instance 1 (10 = Gimbal)
+param set-default MAV_1_FORWARD 1             # MAVLink forwarding for instance 1 (1 = enabled)
+param set-default MAV_1_RATE 11520            # MAVLink data rate for instance 1 (BAUD rate divided by 10)
+param set-default MAV_0_FORWARD 1             # MAVLink forwarding for instance 0 (1 = enabled)
+param set-default SER_TEL3_BAUD 115200        # Serial telemetry baud rate for TELEM 3
