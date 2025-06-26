@@ -13,24 +13,23 @@
 
 . ${R}etc/init.d/rc.mc_defaults
 
-. ${R}etc/init.d/airframes/common_leaf/estimator.leaf
+. ${R}etc/init.d/airframes/common_leaf/estimator
 
-. ${R}etc/init.d/airframes/common_leaf/ekf2_outdoor.leaf
-. ${R}etc/init.d/airframes/common_leaf/mag/internal.leaf
+. ${R}etc/init.d/airframes/common_leaf/ekf2_outdoor
+. ${R}etc/init.d/airframes/common_leaf/mag/internal_only
 
-. ${R}etc/init.d/airframes/common_leaf/safety.leaf
+. ${R}etc/init.d/airframes/common_leaf/safety
 
-. ${R}etc/init.d/airframes/common_leaf/multirotor.leaf
+. ${R}etc/init.d/airframes/common_leaf/multirotor
 
-. ${R}etc/init.d/airframes/common_leaf/mav_0_router.leaf
+. ${R}etc/init.d/airframes/common_leaf/mav_0_router
 
-. ${R}etc/init.d/airframes/common_leaf/mav_2_offboard.leaf
+. ${R}etc/init.d/airframes/common_leaf/mav_2_offboard
 
+. ${R}etc/init.d/airframes/common_leaf/emlid_rtk
+. ${R}etc/init.d/airframes/common_leaf/arkflow
 
-. ${R}etc/init.d/airframes/common_leaf/emlid_rtk.leaf
-. ${R}etc/init.d/airframes/common_leaf/arkflow.leaf
-
-. ${R}etc/init.d/airframes/common_leaf/eth.leaf
+. ${R}etc/init.d/airframes/common_leaf/ethernet
 
 ##################################################
 

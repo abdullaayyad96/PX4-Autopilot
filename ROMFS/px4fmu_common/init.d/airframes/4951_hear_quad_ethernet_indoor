@@ -13,19 +13,19 @@
 
 . ${R}etc/init.d/rc.mc_defaults
 
-. ${R}etc/init.d/airframes/common_leaf/ekf2_indoor.leaf
-. ${R}etc/init.d/airframes/common_leaf/mag/disable.leaf
+. ${R}etc/init.d/airframes/common_leaf/ekf2_indoor
+. ${R}etc/init.d/airframes/common_leaf/mag/disable
 
-. ${R}etc/init.d/airframes/common_leaf/estimator.leaf
+. ${R}etc/init.d/airframes/common_leaf/estimator
 
-. ${R}etc/init.d/airframes/common_leaf/safety.leaf
+. ${R}etc/init.d/airframes/common_leaf/safety
 
-. ${R}etc/init.d/airframes/common_leaf/mav_0_router.leaf
-. ${R}etc/init.d/airframes/common_leaf/mav_2_offboard.leaf
+. ${R}etc/init.d/airframes/common_leaf/mav_0_router
+. ${R}etc/init.d/airframes/common_leaf/mav_2_offboard
 
-. ${R}etc/init.d/airframes/common_leaf/multirotor.leaf
+. ${R}etc/init.d/airframes/common_leaf/multirotor
 
-. ${R}etc/init.d/airframes/common_leaf/eth.leaf
+. ${R}etc/init.d/airframes/common_leaf/ethernet
 
 ##################################################
 
