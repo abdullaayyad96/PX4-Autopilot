@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# @name HEAR ethernet outdoor RTK Emlid
+#
+# @type Multicopter
+# @class Copter
+#
+# @maintainer Abdulla Ayyad <abdulla.ayyad96@gmail.com>
+#
+# @board px4_fmu-v2 exclude
+# @board bitcraze_crazyflie exclude
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+. ${R}etc/init.d/airframes/common_leaf/estimator
+
+. ${R}etc/init.d/airframes/common_leaf/ekf2_outdoor
+. ${R}etc/init.d/airframes/common_leaf/mag/internal_only
+
+. ${R}etc/init.d/airframes/common_leaf/safety
+
+. ${R}etc/init.d/airframes/common_leaf/multirotor
+
+. ${R}etc/init.d/airframes/common_leaf/mav_0_router
+
+. ${R}etc/init.d/airframes/common_leaf/mav_2_offboard
+
+. ${R}etc/init.d/airframes/common_leaf/emlid_rtk
+. ${R}etc/init.d/airframes/common_leaf/arkflow
+
+. ${R}etc/init.d/airframes/common_leaf/ethernet
+
+##################################################
+
+control_allocator stop
+

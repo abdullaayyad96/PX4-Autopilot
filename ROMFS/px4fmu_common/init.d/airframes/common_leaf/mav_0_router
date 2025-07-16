@@ -1,0 +1,10 @@
+# MAV_0 used for mavlink router - command and control
+param set-default MAV_0_CONFIG 1000           # MAVLink instance 2 configuration (1000 = Ethernet)
+param set-default MAV_0_FLOW_CTRL 2           # MAVLink flow control mode (2 = Auto-detected)
+param set-default MAV_0_FORWARD 0             # MAVLink forwarding (0 = disabled)
+param set-default MAV_0_RATE 500000           # MAVLink data rate (bits per second)
+param set-default MAV_0_BROADCAST 1           # MAVLink broadcast mode (1 = enabled) - QGC discovery
+param set-default MAV_0_RADIO_CTL 0           # MAVLink radio control (0 = disabled)
+param set-default MAV_0_REMOTE_PRT 14540      # MAVLink remote port for UDP communication
+param set-default MAV_0_UDP_PRT 14540         # MAVLink local UDP port
+param set-default MAV_0_MODE 0                # MAVLink mode (0 = NORMAL)

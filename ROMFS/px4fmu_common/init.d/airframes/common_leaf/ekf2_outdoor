@@ -1,0 +1,13 @@
+param set-default EKF2_HGT_REF 0          # Height reference source (0 = barometer)
+param set-default EKF2_GPS_CTRL 15        # GPS control mode (15 = enabled with full functionality) Lon/lat+Altitude+3D-velocity+Dual+antenna+heading
+param set-default EKF2_BARO_CTRL 1        # Barometer control mode (1 = enabled)
+param set-default EKF2_RNG_CTRL 0      # Range finder yaw control (0 = disabled)
+param set-default EKF2_MAG_TYPE 1         # Magnetometer type (1 = heading-only)
+param set-default EKF2_EV_CTRL 0          # External vision control mode (0 = disabled)
+param set-default GPS_YAW_OFFSET 0        # GPS yaw offset (degrees)
+
+param set-default SYS_HAS_MAG  1
+param set-default CAL_MAG0_PRIO 1
+
+param set-default EKF2_GPS_P_NOISE 0.5
+param set-default EKF2_GPS_V_NOISE 0.3

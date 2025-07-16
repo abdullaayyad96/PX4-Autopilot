@@ -1,0 +1,7 @@
+param set-default EKF2_HGT_REF 3              # Height reference source (3 = vision)
+param set-default EKF2_GPS_CTRL 0             # GPS control mode (0 = disabled)
+param set-default EKF2_BARO_CTRL 0            # Barometer control mode (0 = disabled)
+param set-default EKF2_RNG_CTRL 0             # Range finder control mode (0 = disabled)
+param set-default EKF2_MAG_TYPE 5             # Magnetometer type (5 = external)
+param set-default EKF2_EV_CTRL 15             # External vision control mode (15 = enabled)
+

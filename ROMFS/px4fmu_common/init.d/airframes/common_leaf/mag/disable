@@ -1,0 +1,1 @@
+param set-default SYS_HAS_MAG 0               # Indicates if the system has a magnetometer (0 = no magnetometer)

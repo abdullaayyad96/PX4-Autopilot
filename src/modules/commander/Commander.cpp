@@ -572,7 +572,7 @@ transition_result_t Commander::arm(arm_disarm_reason_t calling_reason, bool run_
 				return TRANSITION_DENIED;
 			}
 
-			if (!_vehicle_control_mode.flag_control_climb_rate_enabled &&
+			if (!_vehicle_control_mode.flag_control_climb_rate_enabled && !_vehicle_control_mode.flag_control_offboard_enabled &&
 			    !_failsafe_flags.manual_control_signal_lost && !_is_throttle_low
 			    && _vehicle_status.vehicle_type != vehicle_status_s::VEHICLE_TYPE_ROVER) {
 
@@ -2089,11 +2089,11 @@ void Commander::landDetectorUpdate()
 		// Only take actions if armed
 		if (isArmed()) {
 			if (!was_landed && _vehicle_land_detected.landed) {
-				mavlink_log_info(&_mavlink_log_pub, "Landing detected\t");
+				// mavlink_log_info(&_mavlink_log_pub, "Landing detected\t");
 				events::send(events::ID("commander_landing_detected"), events::Log::Info, "Landing detected");
 
 			} else if (was_landed && !_vehicle_land_detected.landed) {
-				mavlink_log_info(&_mavlink_log_pub, "Takeoff detected\t");
+				// mavlink_log_info(&_mavlink_log_pub, "Takeoff detected\t");
 				events::send(events::ID("commander_takeoff_detected"), events::Log::Info, "Takeoff detected");
 				_vehicle_status.takeoff_time = hrt_absolute_time();
 				_have_taken_off_since_arming = true;
