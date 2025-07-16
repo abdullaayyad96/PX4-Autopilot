@@ -442,7 +442,7 @@ MavlinkReceiver::handle_message_actuator_motors(mavlink_message_t *msg)
 	mavlink_msg_actuator_motors_decode(msg, &man);
 
 	offboard_control_mode_s offboard_control_mode{};
-	offboard_control_mode.actuator = true;
+	offboard_control_mode.direct_actuator = true;
 	offboard_control_mode.timestamp = hrt_absolute_time();
 	_offboard_control_mode_pub.publish(offboard_control_mode);
 
